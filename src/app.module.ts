@@ -5,12 +5,13 @@ import { UsersModule } from './users/users.module';
 import { WishesModule } from './wishes/wishes.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
 import { OffersModule } from './offers/offers.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
+  // объект с настройками подключения
+  // опции TypeORM
   imports: [
     TypeOrmModule.forRoot({
-      // объект с настройками подключения
-      // опции TypeORM
       type: 'postgres',
       host: 'localhost',
       port: 5432,
@@ -24,6 +25,7 @@ import { OffersModule } from './offers/offers.module';
     WishesModule,
     WishlistsModule,
     OffersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],
