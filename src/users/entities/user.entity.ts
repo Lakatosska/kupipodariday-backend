@@ -1,34 +1,57 @@
 import { Offer } from 'src/offers/entities/offer.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import {
+  Length,
+  IsNotEmpty,
+  IsDate,
+  IsOptional,
+  IsEmail,
+  IsUrl,
+} from 'class-validator';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @CreateDateColumn()
+  @IsDate()
   createdAt: Date;
 
-  @Column()
+  @UpdateDateColumn()
+  @IsDate()
   updatedAt: Date;
 
-  @Column({ length: 30 })
+  @Column({ unique: true })
+  @Length(2, 30)
+  @IsNotEmpty()
   username: string;
 
   @Column({
-    length: 200,
     default: 'Пока ничего не рассказал о себе',
   })
+  @Length(2, 200)
+  @IsOptional()
   about: string;
 
   @Column({
     default: 'https://i.pravatar.cc/300',
   })
+  @IsUrl()
+  @IsOptional()
   avatar: string;
 
   @Column({ unique: true })
+  @IsEmail()
   email: string;
 
   @Column()
