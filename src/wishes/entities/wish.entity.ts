@@ -7,6 +7,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   ManyToMany,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { Length, IsDate, IsUrl, IsFQDN, IsInt } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
@@ -56,7 +58,7 @@ export class Wish {
   owner: User;
 
   // массив ссылок на заявки скинуться от других пользователей
-  @ManyToMany(() => Offer, (offer) => offer.user)
+  @OneToMany(() => Offer, (offer) => offer.item)
   offers: Offer[];
 
   // содержит cчётчик тех, кто скопировал подарок себе. Целое десятичное число

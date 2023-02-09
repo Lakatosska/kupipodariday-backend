@@ -52,20 +52,20 @@ export class User {
 
   @Column({ unique: true })
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @Column()
+  @IsNotEmpty()
   password: string;
 
-  @Column()
   @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Wish[];
 
-  @Column()
   @OneToMany(() => Offer, (offer) => offer.user)
   offers: Offer[];
 
-  @Column()
-  @OneToMany(() => Wishlist, (wishlist) => wishlist.id)
+  // wishlists содержит список вишлистов, которые создал пользователь. Установите для него подходящий тип связи.
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.owner)
   wishlists: Wishlist[];
 }

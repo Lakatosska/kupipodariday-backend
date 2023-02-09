@@ -1,31 +1,48 @@
+import { IsDate, Length, MaxLength } from 'class-validator';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Wish } from 'src/wishes/entities/wish.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Wishlist {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @CreateDateColumn()
+  @IsDate()
   createdAt: Date;
 
-  @Column()
+  @UpdateDateColumn()
+  @IsDate()
   updatedAt: Date;
 
   // Не может быть длиннее 250 символов и короче одного
-  @Column({ length: 250 })
+  @Column()
+  @Length(1, 250)
   name: string;
 
-  @Column({ length: 1500 })
+  // описание подборки, строка до 1500 символов
+  @Column()
+  @MaxLength(1500)
   description: string;
 
   // обложка для подборки
   @Column()
   image: string;
 
-  // ?? содержит набор ссылок на подарки
-  /*
-  @Column()
+  // колонка есть только в сваггере
+  @ManyToOne(() => User, (user) => user.wishlists)
+  owner: User;
+
+  // содержит набор ссылок на подарки
+  @ManyToMany(() => Wish, (wish) => wish.id)
   items: Wish[];
-  */
 }
