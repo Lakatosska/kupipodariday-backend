@@ -1,10 +1,11 @@
-import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 import {
   Length,
@@ -14,6 +15,8 @@ import {
   IsEmail,
   IsUrl,
 } from 'class-validator';
+import { User } from '../../users/entities/user.entity';
+import { Wish } from '../../wishes/entities/wish.entity';
 
 @Entity()
 export class Offer {
@@ -29,13 +32,12 @@ export class Offer {
   updatedAt: Date;
 
   // содержит id желающего скинуться
-  @Column()
-  //user: User;
-  user: string;
+  @ManyToOne(() => User, (user) => user.offers)
+  user: User;
 
   // содержит ссылку на товар
-  @Column()
-  item: string;
+  @ManyToOne(() => Wish, (wish) => wish.offers)
+  item: Wish;
 
   // сумма заявки, округляется до двух знаков после запятой
   @Column()

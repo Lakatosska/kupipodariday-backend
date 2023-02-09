@@ -1,4 +1,3 @@
-import { Offer } from 'src/offers/entities/offer.entity';
 import {
   Column,
   Entity,
@@ -11,7 +10,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Length, IsDate, IsUrl, IsFQDN, IsInt } from 'class-validator';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
+import { Offer } from '../../offers/entities/offer.entity';
 
 @Entity()
 export class Wish {

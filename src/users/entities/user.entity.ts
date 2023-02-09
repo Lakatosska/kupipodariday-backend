@@ -1,6 +1,3 @@
-import { Offer } from 'src/offers/entities/offer.entity';
-import { Wish } from 'src/wishes/entities/wish.entity';
-import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -17,6 +14,9 @@ import {
   IsEmail,
   IsUrl,
 } from 'class-validator';
+import { Offer } from '../../offers/entities/offer.entity';
+import { Wish } from '../../wishes/entities/wish.entity';
+import { Wishlist } from '../../wishlists/entities/wishlist.entity';
 
 @Entity()
 export class User {
