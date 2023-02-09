@@ -24,6 +24,8 @@ export class Wishlist {
   image: string;
 
   // ?? содержит набор ссылок на подарки
+  /*
   @Column()
   items: Wish[];
+  */
 }

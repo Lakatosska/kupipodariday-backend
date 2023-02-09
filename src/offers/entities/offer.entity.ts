@@ -1,20 +1,37 @@
 import { User } from 'src/users/entities/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import {
+  Length,
+  IsNotEmpty,
+  IsDate,
+  IsOptional,
+  IsEmail,
+  IsUrl,
+} from 'class-validator';
 
 @Entity()
 export class Offer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @CreateDateColumn()
+  @IsDate()
   createdAt: Date;
 
-  @Column()
+  @UpdateDateColumn()
+  @IsDate()
   updatedAt: Date;
 
   // содержит id желающего скинуться
   @Column()
-  user: User;
+  //user: User;
+  user: string;
 
   // содержит ссылку на товар
   @Column()
