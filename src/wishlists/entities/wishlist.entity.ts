@@ -1,4 +1,4 @@
-import { IsDate, Length, MaxLength } from 'class-validator';
+import { IsDate, IsUrl, Length, MaxLength } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -37,6 +37,7 @@ export class Wishlist {
 
   // обложка для подборки
   @Column()
+  @IsUrl()
   image: string;
 
   // колонка есть только в сваггере
@@ -44,6 +45,7 @@ export class Wishlist {
   owner: User;
 
   // содержит набор ссылок на подарки
-  @ManyToMany(() => Wish, (wish) => wish.id)
+  @ManyToMany(() => Wish)
+  @JoinTable()
   items: Wish[];
 }
