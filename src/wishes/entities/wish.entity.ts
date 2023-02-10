@@ -5,9 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  ManyToMany,
   OneToMany,
-  JoinColumn,
 } from 'typeorm';
 import { Length, IsDate, IsUrl, IsFQDN, IsInt } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
@@ -32,7 +30,6 @@ export class Wish {
 
   // ссылка на интернет-магазин
   @Column()
-  // @IsUrl()
   @IsFQDN()
   link: string;
 

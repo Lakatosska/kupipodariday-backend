@@ -4,17 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   ManyToOne,
 } from 'typeorm';
-import {
-  Length,
-  IsNotEmpty,
-  IsDate,
-  IsOptional,
-  IsEmail,
-  IsUrl,
-} from 'class-validator';
+import { IsDate } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 import { Wish } from '../../wishes/entities/wish.entity';
 

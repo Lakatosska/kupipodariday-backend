@@ -59,13 +59,15 @@ export class User {
   @IsNotEmpty()
   password: string;
 
+  // список желаемых подарков
   @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Wish[];
 
+  // содержит список подарков, на которые скидывается пользователь
   @OneToMany(() => Offer, (offer) => offer.user)
   offers: Offer[];
 
-  // wishlists содержит список вишлистов, которые создал пользователь. Установите для него подходящий тип связи.
+  // wishlists содержит список вишлистов, которые создал пользователь
   @OneToMany(() => Wishlist, (wishlist) => wishlist.owner)
   wishlists: Wishlist[];
 }
