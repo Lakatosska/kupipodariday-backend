@@ -25,22 +25,20 @@ export class UsersService {
     return await this.usersRepository.save(user);
   }
 
-  findAll(): Promise<User[]> {
+  findAll() {
     return this.usersRepository.find();
   }
 
-  findOne(id: number): Promise<User> {
-    // return this.userRepository.find((user) => user.id === id)
+  findOne(id: number) {
     return this.usersRepository.findOneBy({ id });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    const { username, about, email, avatar, password } = updateUserDto;
-    const user = this.usersRepository.update()
-    //return await this.usersRepository.save(user);
+  // + надо написать условие хеширования пароля, если будет его update
+  async updateOne(id: number, updateUserDto: UpdateUserDto) {
+    return await this.usersRepository.update({ id }, updateUserDto);
   }
 
-  async remove(id: number) {
+  async removeOne(id: number) {
     await this.usersRepository.delete(id);
   }
 }

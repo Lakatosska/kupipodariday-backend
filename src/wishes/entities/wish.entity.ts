@@ -7,7 +7,14 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Length, IsDate, IsUrl, IsFQDN, IsInt } from 'class-validator';
+import {
+  Length,
+  IsDate,
+  IsUrl,
+  IsFQDN,
+  IsInt,
+  IsPositive,
+} from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 import { Offer } from '../../offers/entities/offer.entity';
 
@@ -40,6 +47,7 @@ export class Wish {
 
   // с округлением до сотых
   @Column()
+  @IsPositive()
   price: number;
 
   // сумма предварительного сбора, округляется до сотых

@@ -25,7 +25,6 @@ export class Wishlist {
   @IsDate()
   updatedAt: Date;
 
-  // Не может быть длиннее 250 символов и короче одного
   @Column()
   @Length(1, 250)
   name: string;
