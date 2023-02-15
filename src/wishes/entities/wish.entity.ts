@@ -14,6 +14,7 @@ import {
   IsFQDN,
   IsInt,
   IsPositive,
+  IsNumber,
 } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 import { Offer } from '../../offers/entities/offer.entity';
@@ -46,12 +47,12 @@ export class Wish {
   image: string;
 
   // с округлением до сотых
-  @Column()
-  @IsPositive()
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @IsNumber()
   price: number;
 
   // сумма предварительного сбора, округляется до сотых
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   raised: number;
 
   @Column()

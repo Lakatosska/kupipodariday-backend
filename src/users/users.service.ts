@@ -15,22 +15,22 @@ export class UsersService {
   // надо еще хешировать пароль
   async create(createUserDto: CreateUserDto) {
     const { username, about, email, avatar, password } = createUserDto;
-    const user = this.usersRepository.create({
+    const user = await this.usersRepository.create({
       username,
       about,
       email,
       avatar,
       password,
     });
-    return await this.usersRepository.save(user);
+    return this.usersRepository.save(user);
   }
 
-  findAll() {
-    return this.usersRepository.find();
+  async findAll() {
+    return await this.usersRepository.find();
   }
 
-  findOne(id: number) {
-    return this.usersRepository.findOneBy({ id });
+  async findOne(id: number) {
+    return await this.usersRepository.findOneBy({ id });
   }
 
   // + надо написать условие хеширования пароля, если будет его update
@@ -40,5 +40,10 @@ export class UsersService {
 
   async removeOne(id: number) {
     await this.usersRepository.delete(id);
+  }
+
+  async findByUsername(username: string) {
+    const user = await this.usersRepository.findOneBy({ username });
+    return user;
   }
 }

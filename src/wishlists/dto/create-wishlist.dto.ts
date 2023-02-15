@@ -16,6 +16,11 @@ export class CreateWishlistDto {
   @IsString()
   @IsUrl()
   @IsOptional()
+  description: string;
+
+  @IsString()
+  @IsUrl()
+  @IsOptional()
   image: string;
 
   @IsArray()

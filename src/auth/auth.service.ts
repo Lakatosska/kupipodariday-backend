@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 
+// для идентификации пользователя
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private jwtService: JwtService,
+    private usersService: UsersService,
+  ) {}
+
+  // тут будем генерировать токен
+  auth(user: User) {
+    const payload = { sub: user.id };
+
+    return { access_token: this.jwtService.sign(payload) };
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  // проверяет, совпадает ли пароль пользователя с тем, что есть в базе
+  async validatePassword(username: string, password: string) {
+    const user = await this.usersService.findByUsername(username);
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    /* В идеальном случае пароль обязательно должен быть захэширован */
+    if (user && user.password === password) {
+      /* Исключаем пароль из результата */
+      const { password, ...result } = user;
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+      // или тут return user?
+      return result;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    return null;
   }
 }
