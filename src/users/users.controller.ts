@@ -14,6 +14,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UseGuards } from '@nestjs/common/decorators';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { FindUsersDto } from './dto/find-users.dto';
+import { User } from './entities/user.entity';
+// import { Request } from 'express';
+// import { REQUEST } from '@nestjs/core';
 
 //@UseGuards(JwtGuard)
 @Controller('users')
@@ -28,17 +31,30 @@ export class UsersController {
   }
   */
 
-  @Get('me')
-  findMe(@Request() req) {
-    return this.usersService.findOneById(req.user.id);
+  // создала, чтобы проверить. работает.
+  @Get('all')
+  findAllUsers() {
+    return this.usersService.findAll();
   }
 
+  // работает
+  @UseGuards(JwtGuard)
+  @Get('me')
+  findMe(@Request() req) {
+    //return this.usersService.findOneById(req.user.id);
+    return req.user;
+  }
+
+  // работает только с переданными email и password
+  @UseGuards(JwtGuard)
   @Patch('me')
   async updateMe(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     const me = req.user.id;
-    return await this.usersService.updateOne(me, updateUserDto);
+    await this.usersService.updateOne(me, updateUserDto);
+    return this.usersService.findOneById(me);
   }
 
+  // работает
   @Get(':username')
   findUserByUsername(@Param('username') username: string) {
     return this.usersService.findOneByUsername(username);
@@ -50,6 +66,7 @@ export class UsersController {
     return this.usersService.findMany(findUsersDto);
   }
 
+  // !!! не работает
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOneById(+id);
