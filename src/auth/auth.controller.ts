@@ -4,7 +4,7 @@ import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 
-@Controller('auth')
+@Controller('/')
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -13,9 +13,9 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('signin')
-  signin(@Req() req) {
+  async signin(@Req() req) {
     // Генерируем для пользователя JWT токен
-    return this.authService.auth(req.user);
+    return await this.authService.auth(req.user);
   }
 
   @Post('signup')

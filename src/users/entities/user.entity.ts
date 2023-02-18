@@ -37,7 +37,7 @@ export class User {
   username: string;
 
   @Column({
-    default: 'Пока ничего не рассказал о себе',
+    default: 'Пока ничего не рассказал(a) о себе',
   })
   @Length(2, 200)
   @IsOptional()

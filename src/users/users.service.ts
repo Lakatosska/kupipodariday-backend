@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
+import { FindUsersDto } from './dto/find-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,13 +16,11 @@ export class UsersService {
 
   // надо еще хешировать пароль
   async create(createUserDto: CreateUserDto) {
-    const { username, about, email, avatar, password } = createUserDto;
+    const hash = await bcrypt.hash(createUserDto.password, 10);
+    //const { username, about, email, avatar, password } = createUserDto;
     const user = await this.usersRepository.create({
-      username,
-      about,
-      email,
-      avatar,
-      password,
+      ...createUserDto,
+      password: hash,
     });
     return this.usersRepository.save(user);
   }
@@ -29,8 +29,19 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOneById(id: number) {
     return await this.usersRepository.findOneBy({ id });
+  }
+
+  async findOneByUsername(username: string) {
+    return await this.usersRepository.findOneBy({ username });
+  }
+
+  async findMany(findUsersDto: FindUsersDto) {
+    const { query } = findUsersDto;
+    return await this.usersRepository.find({
+      where: [{ email: query }, { username: query }],
+    });
   }
 
   // + надо написать условие хеширования пароля, если будет его update
@@ -39,11 +50,6 @@ export class UsersService {
   }
 
   async removeOne(id: number) {
-    await this.usersRepository.delete(id);
-  }
-
-  async findByUsername(username: string) {
-    const user = await this.usersRepository.findOneBy({ username });
-    return user;
+    await this.usersRepository.delete({ id });
   }
 }

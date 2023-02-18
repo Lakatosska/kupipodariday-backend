@@ -4,7 +4,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 
-// проверить!! возможно в теории ошибка
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -25,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    */
   async validate(jwtPayload: { sub: number }) {
     /* В subject токена будем передавать идентификатор пользователя */
-    const user = this.usersService.findOne(jwtPayload.sub);
+    const user = await this.usersService.findOneById(jwtPayload.sub);
 
     if (!user) {
       throw new UnauthorizedException();
