@@ -6,6 +6,7 @@ import {
   IsFQDN,
   IsNumber,
   Min,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateWishDto {
@@ -15,7 +16,7 @@ export class CreateWishDto {
   name: string;
 
   @IsString()
-  @IsFQDN()
+  @IsUrl()
   @IsNotEmpty()
   link: string;
 
@@ -32,6 +33,6 @@ export class CreateWishDto {
 
   @IsString()
   @Length(1, 1024)
-  @IsNotEmpty()
+  @IsOptional()
   description: string;
 }

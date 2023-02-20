@@ -45,7 +45,7 @@ export class UsersController {
     return req.user;
   }
 
-  // работает только с переданными email и password
+  // работает только если передать email и password
   @UseGuards(JwtGuard)
   @Patch('me')
   async updateMe(@Request() req, @Body() updateUserDto: UpdateUserDto) {
@@ -71,15 +71,4 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.findOneById(+id);
   }
-  /*
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateOne(+id, updateUserDto);
-  }
-  
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.removeOne(+id);
-  }
-  */
 }

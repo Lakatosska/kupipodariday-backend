@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
@@ -12,7 +13,8 @@ export class WishesService {
     private wishesRepository: Repository<Wish>,
   ) {}
 
-  async create(createWishDto: CreateWishDto) {
+  // передаем юзера, чтобы заполнить поле ownerId в таблице
+  async create(user: User, createWishDto: CreateWishDto) {
     const { name, link, image, price, description } = createWishDto;
     const wish = this.wishesRepository.create({
       name,
@@ -21,7 +23,10 @@ export class WishesService {
       price,
       description,
     });
-    return await this.wishesRepository.save(wish);
+    return await this.wishesRepository.save({
+      owner: user,
+      ...wish,
+    });
   }
 
   findAll() {
@@ -32,6 +37,8 @@ export class WishesService {
     return this.wishesRepository.findOneBy({ id });
   }
 
+  // проверка, что юзер редактирует свой виш
+  // может отредактировать описание подарка и стоимость, если никто не скинулся
   async updateOne(id: number, updateWishDto: UpdateWishDto) {
     return await this.wishesRepository.update({ id }, updateWishDto);
   }

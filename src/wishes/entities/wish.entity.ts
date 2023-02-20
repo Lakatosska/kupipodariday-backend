@@ -28,7 +28,7 @@ export class Wish {
   @IsDate()
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   @IsDate()
   updatedAt: Date;
 
@@ -38,7 +38,7 @@ export class Wish {
 
   // ссылка на интернет-магазин
   @Column()
-  @IsFQDN()
+  @IsUrl()
   link: string;
 
   // Должна быть валидным URL
@@ -55,10 +55,11 @@ export class Wish {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   raised: number;
 
-  @Column()
+  @Column({ default: '' })
   @Length(1, 1024)
   description: string;
 
+  // wish.entity.ts
   // ссылка на пользователя, который добавил пожелание подарка
   @ManyToOne(() => User, (user) => user.wishes)
   owner: User;
@@ -68,7 +69,7 @@ export class Wish {
   offers: Offer[];
 
   // содержит cчётчик тех, кто скопировал подарок себе. Целое десятичное число
-  @Column()
+  @Column({ default: 0 })
   @IsInt()
   copied: number;
 }
