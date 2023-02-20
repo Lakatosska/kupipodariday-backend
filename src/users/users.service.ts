@@ -44,9 +44,17 @@ export class UsersService {
     });
   }
 
-  // + надо написать условие хеширования пароля, если будет его update
+  // не должен в ответе приходить пароль
   async updateOne(id: number, updateUserDto: UpdateUserDto) {
-    return await this.usersRepository.update({ id }, updateUserDto);
+    const hash = await bcrypt.hash(updateUserDto.password, 10);
+
+    if (updateUserDto.password) {
+      return await this.usersRepository.update(id, {
+        ...updateUserDto,
+        password: hash,
+      });
+    }
+    return await this.usersRepository.update(id, updateUserDto);
   }
 
   async removeOne(id: number) {

@@ -60,7 +60,7 @@ export class UsersController {
     return this.usersService.findOneByUsername(username);
   }
 
-  //работает
+  // работает
   @Post('find')
   findAll(@Body() findUsersDto: FindUsersDto) {
     return this.usersService.findMany(findUsersDto);
