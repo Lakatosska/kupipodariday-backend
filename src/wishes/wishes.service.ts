@@ -22,11 +22,9 @@ export class WishesService {
       image,
       price,
       description,
-    });
-    return await this.wishesRepository.save({
       owner: user,
-      ...wish,
     });
+    return await this.wishesRepository.save(wish);
   }
 
   findAll() {

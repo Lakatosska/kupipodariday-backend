@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { IsDate } from 'class-validator';
+import { IsDate, IsNumber, IsPositive } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 import { Wish } from '../../wishes/entities/wish.entity';
 
@@ -33,6 +33,7 @@ export class Offer {
 
   // сумма заявки, округляется до двух знаков после запятой
   @Column()
+  @IsPositive()
   amount: number;
 
   // флаг, который определяет показывать ли информацию о скидывающемся в списке

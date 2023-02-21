@@ -14,8 +14,16 @@ export class WishlistsService {
     private wishlistsRepository: Repository<Wishlist>,
   ) {}
 
-  async create(createWishlistDto: CreateWishlistDto) {
-    const wishlist = this.wishlistsRepository.create(createWishlistDto);
+  async create(user: User, createWishlistDto: CreateWishlistDto) {
+    const { name, description, image, itemsId } = createWishlistDto;
+    //const items = itemsId.map((id) => ({ id } as Wish));
+    const wishlist = this.wishlistsRepository.create({
+      name,
+      description,
+      image,
+      // items,
+      owner: user,
+    });
     return await this.wishlistsRepository.save(wishlist);
   }
 

@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
 export class CreateOfferDto {
   @IsNumber()
@@ -6,7 +6,7 @@ export class CreateOfferDto {
   itemId: number;
 
   // сумма заявки, округляется до двух знаков после запятой
-  @IsNumber()
+  @IsPositive()
   @IsNotEmpty()
   amount: number;
 

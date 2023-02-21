@@ -14,7 +14,6 @@ export class CreateWishlistDto {
   name: string;
 
   @IsString()
-  @IsUrl()
   @IsOptional()
   description: string;
 
@@ -24,5 +23,6 @@ export class CreateWishlistDto {
   image: string;
 
   @IsArray()
+  @IsOptional()
   itemsId: number[];
 }

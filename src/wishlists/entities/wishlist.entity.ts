@@ -30,7 +30,7 @@ export class Wishlist {
   name: string;
 
   // описание подборки, строка до 1500 символов
-  @Column()
+  @Column({ default: '' })
   @MaxLength(1500)
   description: string;
 
