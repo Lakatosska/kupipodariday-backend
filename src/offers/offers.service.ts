@@ -36,12 +36,4 @@ export class OffersService {
   findOne(id: number) {
     return this.offersRepository.findOneBy({ id });
   }
-
-  updateOne(id: number, updateOfferDto: UpdateOfferDto) {
-    return `This action updates a #${id} offer`;
-  }
-
-  async removeOne(id: number) {
-    await this.offersRepository.delete(id);
-  }
 }

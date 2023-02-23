@@ -15,6 +15,7 @@ import {
   IsInt,
   IsPositive,
   IsNumber,
+  isPositive,
 } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 import { Offer } from '../../offers/entities/offer.entity';
@@ -53,6 +54,7 @@ export class Wish {
 
   // сумма предварительного сбора, округляется до сотых
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @IsPositive()
   raised: number;
 
   @Column({ default: '' })
@@ -70,6 +72,6 @@ export class Wish {
 
   // содержит cчётчик тех, кто скопировал подарок себе. Целое десятичное число
   @Column({ default: 0 })
-  @IsInt()
+  @IsPositive()
   copied: number;
 }

@@ -50,20 +50,26 @@ export class WishesController {
     return this.wishesService.findOne(+id);
   }
 
-  // проверить
+  // работает
   @UseGuards(JwtGuard)
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @ReqUser() user: User,
     @Body() updateWishDto: UpdateWishDto,
   ) {
-    return this.wishesService.updateOne(+id, updateWishDto);
+    return await this.wishesService.updateOne(+id, updateWishDto);
   }
 
   // работает
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.wishesService.removeOne(+id);
+  }
+
+  // работает
+  @Post(':id/copy')
+  async copy(@ReqUser() user: User, @Param('id') id: string) {
+    return this.wishesService.copyWish(user, +id);
   }
 }

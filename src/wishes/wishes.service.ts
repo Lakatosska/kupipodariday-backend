@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { Wish } from './entities/wish.entity';
+import { ReqUser } from 'src/users/users.decorator';
 
 @Injectable()
 export class WishesService {
@@ -43,5 +44,22 @@ export class WishesService {
 
   async removeOne(id: number) {
     await this.wishesRepository.delete(id);
+  }
+
+  async copyWish(@ReqUser() user: User, id: number) {
+    const wish = await this.wishesRepository.findOneBy({ id });
+
+    await this.wishesRepository.update({ id }, { copied: wish.copied + 1 });
+
+    const { name, link, image, price, description } = wish;
+
+    return await this.wishesRepository.create({
+      name,
+      link,
+      image,
+      price,
+      description,
+      owner: user,
+    });
   }
 }
