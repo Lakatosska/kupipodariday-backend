@@ -38,10 +38,10 @@ export class WishesController {
     return this.wishesService.findAll();
   }
 
-  // надо сделать
+  // работает
   @Get('top')
   findTop() {
-    return this.wishesService.findAll();
+    return this.wishesService.getTopWishes();
   }
 
   // работает
