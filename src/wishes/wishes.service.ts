@@ -36,10 +36,17 @@ export class WishesService {
     return this.wishesRepository.findOneBy({ id });
   }
 
+  // !! прописать ошибку
   // проверка, что юзер редактирует свой виш
   // может отредактировать описание подарка и стоимость, если никто не скинулся
   async updateOne(id: number, updateWishDto: UpdateWishDto) {
-    return await this.wishesRepository.update({ id }, updateWishDto);
+    const wish = await this.wishesRepository.findOneBy({ id });
+    if (wish.raised > 0) {
+      return console.log(
+        'Вы можете редактировать подарки, на которые еще никто не скинулся',
+      );
+    }
+    return await this.wishesRepository.update(wish, updateWishDto);
   }
 
   async removeOne(id: number) {
