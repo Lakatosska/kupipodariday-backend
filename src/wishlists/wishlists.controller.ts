@@ -15,44 +15,40 @@ import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { ReqUser } from 'src/users/users.decorator';
 import { User } from 'src/users/entities/user.entity';
 
+@UseGuards(JwtGuard)
 @Controller('wishlists')
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 
-  @UseGuards(JwtGuard)
   @Post()
-  create(@ReqUser() user: User, @Body() createWishlistDto: CreateWishlistDto) {
-    return this.wishlistsService.create(user, createWishlistDto);
+  async create(
+    @ReqUser() user: User,
+    @Body() createWishlistDto: CreateWishlistDto,
+  ) {
+    return await this.wishlistsService.create(user, createWishlistDto);
   }
 
-  // работает
-  @UseGuards(JwtGuard)
   @Get()
   findAll() {
     return this.wishlistsService.findAll();
   }
 
-  // работает
-  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.wishlistsService.findOne(+id);
+    return this.wishlistsService.findOneById(+id);
   }
 
-  // работает, но возвращает странный ответ
-  @UseGuards(JwtGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
+    @ReqUser() user: User,
     @Body() updateWishlistDto: UpdateWishlistDto,
   ) {
-    return this.wishlistsService.updateOne(+id, updateWishlistDto);
+    return this.wishlistsService.updateOne(+id, user.id, updateWishlistDto);
   }
 
-  // работает
-  @UseGuards(JwtGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishlistsService.removeOne(+id);
+  remove(@Param('id') id: string, @ReqUser() user: User) {
+    return this.wishlistsService.removeOne(+id, user.id);
   }
 }

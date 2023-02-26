@@ -1,5 +1,5 @@
 export default () => ({
-  port: 3000,
+  port: 3001,
   db: {
     type: 'postgres',
     host: 'localhost',
@@ -10,14 +10,3 @@ export default () => ({
   },
   jwt_secret: 'jwt_secret',
 });
-/*
-PORT = [порт сервера]
-DATABASE_HOST = [хост базы данных]
-DATABASE_PORT = [порт базы данных]
-DATABASE_NAME = [имя базы данных]
-DATABASE_TYPE = [тип базы данных]
-DATABASE_USERNAME = [имя пользователя базы данных]
-DATABASE_PASSWORD = [пароль пользователя базы данных]
-SALT = [значение `saltOrRounds` для bcrypt]
-JWT_SECRET = [значение секрета jwt]
-*/

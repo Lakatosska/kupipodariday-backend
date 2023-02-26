@@ -20,7 +20,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
-  findMe(@ReqUser() user: User) {
+  findProfile(@ReqUser() user: User) {
     return user;
   }
 

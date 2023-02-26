@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { WishesService } from './wishes.service';
 import { CreateWishDto } from './dto/create-wish.dto';
@@ -26,19 +25,11 @@ export class WishesController {
     return this.wishesService.create(user, createWishDto);
   }
 
-  // метод не нужен, проверка работы
-  @Get('all')
-  findAll() {
-    return this.wishesService.findAll();
-  }
-
-  // надо сделать
   @Get('last')
   findLast() {
     return this.wishesService.getLastWishes();
   }
 
-  // работает
   @Get('top')
   findTop() {
     return this.wishesService.getTopWishes();

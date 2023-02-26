@@ -28,13 +28,10 @@ export class WishesService {
     return await this.wishesRepository.save(wish);
   }
 
-  findAll() {
-    return this.wishesRepository.find();
-  }
-
-  findOne(id: number) {
-    return this.wishesRepository.findOneBy({ id });
-  }
+  //Добавлено 24.02.2023 пользователем undefined ↗
+  // findOne(id: number) {
+  //   return this.wishesRepository.findOneBy({ id });
+  // }
 
   // !! прописать ошибку
   // проверка, что юзер редактирует свой виш
@@ -53,8 +50,23 @@ export class WishesService {
     await this.wishesRepository.delete(id);
   }
 
-  async copyWish(@ReqUser() user: User, id: number) {
-    const wish = await this.wishesRepository.findOneBy({ id });
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
+  async findOne(id: number) {
+    return await this.wishesRepository.findOne({
+      relations: {
+        owner: { wishes: true, wishlists: true, offers: true },
+        offers: { user: true },
+      },
+      where: { id },
+    });
+  }
+
+  // findOne(query) {
+  //   return this.wishesRepository.findOne(query);
+  // }
+
+  async copyWish(user: User, id: number) {
+    const wish = await this.findOne(id);
 
     await this.wishesRepository.update({ id }, { copied: wish.copied + 1 });
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
@@ -16,30 +16,62 @@ export class WishlistsService {
 
   async create(user: User, createWishlistDto: CreateWishlistDto) {
     const { name, description, image, itemsId } = createWishlistDto;
-    //const items = itemsId.map((id) => ({ id } as Wish));
+    const items = itemsId.map((id) => ({ id } as Wish));
     const wishlist = this.wishlistsRepository.create({
       name,
       description,
       image,
-      // items,
+      items,
       owner: user,
     });
     return await this.wishlistsRepository.save(wishlist);
   }
 
   findAll() {
-    return this.wishlistsRepository.find();
+    return this.wishlistsRepository.find({ relations: ['items', 'owner'] });
   }
 
-  findOne(id: number) {
-    return this.wishlistsRepository.findOneBy({ id });
+  findOneById(id: number) {
+    return this.wishlistsRepository.findOne({
+      where: { id },
+      relations: ['items', 'owner'],
+    });
   }
 
-  async updateOne(id: number, updateWishlistDto: UpdateWishlistDto) {
-    return await this.wishlistsRepository.update({ id }, updateWishlistDto);
+  findOne(query) {
+    return this.wishlistsRepository.findOne(query);
   }
 
-  async removeOne(id: number) {
+  async updateOne(
+    id: number,
+    userId: number,
+    updateWishlistDto: UpdateWishlistDto,
+  ) {
+    const wishlist = await this.findOne({
+      where: { id },
+      relations: { owner: true },
+    });
+
+    if (wishlist.owner.id !== userId) {
+      throw new ForbiddenException(
+        'Можно редактировать только свои списки подарков',
+      );
+    }
+
+    return await this.wishlistsRepository.update(id, updateWishlistDto);
+  }
+
+  async removeOne(id: number, userId: number) {
+    const wishlist = await this.findOne({
+      where: { id },
+      relations: { owner: true },
+    });
+
+    if (wishlist.owner.id !== userId) {
+      throw new ForbiddenException(
+        'Вы можете удалять только свои списки подарков',
+      );
+    }
     await this.wishlistsRepository.delete(id);
   }
 }
