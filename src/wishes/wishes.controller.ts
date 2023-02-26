@@ -35,7 +35,7 @@ export class WishesController {
   // надо сделать
   @Get('last')
   findLast() {
-    return this.wishesService.findAll();
+    return this.wishesService.getLastWishes();
   }
 
   // работает
@@ -45,6 +45,7 @@ export class WishesController {
   }
 
   // работает
+  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.wishesService.findOne(+id);
@@ -62,12 +63,14 @@ export class WishesController {
   }
 
   // работает
+  @UseGuards(JwtGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.wishesService.removeOne(+id);
   }
 
   // работает
+  @UseGuards(JwtGuard)
   @Post(':id/copy')
   async copy(@ReqUser() user: User, @Param('id') id: string) {
     return this.wishesService.copyWish(user, +id);

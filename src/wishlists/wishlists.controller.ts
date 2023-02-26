@@ -26,18 +26,21 @@ export class WishlistsController {
   }
 
   // работает
+  @UseGuards(JwtGuard)
   @Get()
   findAll() {
     return this.wishlistsService.findAll();
   }
 
   // работает
+  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.wishlistsService.findOne(+id);
   }
 
   // работает, но возвращает странный ответ
+  @UseGuards(JwtGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -47,6 +50,7 @@ export class WishlistsController {
   }
 
   // работает
+  @UseGuards(JwtGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.wishlistsService.removeOne(+id);

@@ -23,17 +23,11 @@ export class AuthService {
   async validatePassword(username: string, password: string) {
     const user = await this.usersService.findOneByUsername(username);
 
-    /* В идеальном случае пароль обязательно должен быть захэширован */
-    //if (user && user.password === password) {
     if (user && (await bcrypt.compare(password, user.password))) {
       /* Исключаем пароль из результата */
-      //const { password, ...result } = user;
-
-      // или тут return user?
-      //return result;
-      return user;
+      const { password, ...result } = user;
+      return result;
     }
-
     return null;
   }
 }

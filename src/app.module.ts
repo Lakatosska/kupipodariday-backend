@@ -10,13 +10,10 @@ import { User } from './users/entities/user.entity';
 import { Wish } from './wishes/entities/wish.entity';
 import { Wishlist } from './wishlists/entities/wishlist.entity';
 import { Offer } from './offers/entities/offer.entity';
-import { Auth } from './auth/entities/auth.entity';
 import { ConfigModule } from '@nestjs/config';
 import config from '../config';
 
 @Module({
-  // объект с настройками подключения
-  // опции TypeORM
   imports: [
     ConfigModule.forRoot({ load: [config] }),
     TypeOrmModule.forRoot({
@@ -35,7 +32,5 @@ import config from '../config';
     OffersModule,
     AuthModule,
   ],
-  // controllers: [AppController],
-  // providers: [],
 })
 export class AppModule {}

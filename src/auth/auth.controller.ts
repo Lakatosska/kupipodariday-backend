@@ -1,5 +1,7 @@
 import { Controller, Post, UseGuards, Req, Body } from '@nestjs/common';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { User } from '../users/entities/user.entity';
+import { ReqUser } from '../users/users.decorator';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
@@ -13,16 +15,15 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('signin')
-  async signin(@Req() req) {
+  signin(@ReqUser() user: User) {
     // Генерируем для пользователя JWT токен
-    return await this.authService.auth(req.user);
+    return this.authService.auth(user);
   }
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
-    // При регистрации, создаём пользователя и генерируем для него токен
+    // При регистрации - 1.создаём пользователя, 2.генерируем для него токен
     const user = await this.usersService.create(createUserDto);
-
     return this.authService.auth(user);
   }
 }

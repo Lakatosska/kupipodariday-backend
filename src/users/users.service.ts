@@ -14,27 +14,34 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  // надо еще хешировать пароль
   async create(createUserDto: CreateUserDto) {
     const hash = await bcrypt.hash(createUserDto.password, 10);
-    //const { username, about, email, avatar, password } = createUserDto;
-    const user = await this.usersRepository.create({
+    const newUser = await this.usersRepository.create({
       ...createUserDto,
       password: hash,
     });
-    return this.usersRepository.save(user);
+    const user = await this.usersRepository.save(newUser);
+    delete user.password;
+    return user;
   }
 
   async findAll() {
     return await this.usersRepository.find();
   }
 
+  async findOne(query) {
+    return await this.usersRepository.findOne(query);
+  }
+
   async findOneById(id: number) {
-    return await this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepository.findOneBy({ id });
+    return user;
   }
 
   async findOneByUsername(username: string) {
-    return await this.usersRepository.findOneBy({ username });
+    return await this.usersRepository.findOne({
+      where: { username: username },
+    });
   }
 
   async findMany(findUsersDto: FindUsersDto) {
@@ -44,20 +51,37 @@ export class UsersService {
     });
   }
 
-  // не должен в ответе приходить пароль
   async updateOne(id: number, updateUserDto: UpdateUserDto) {
-    const hash = await bcrypt.hash(updateUserDto.password, 10);
-
     if (updateUserDto.password) {
-      return await this.usersRepository.update(id, {
-        ...updateUserDto,
-        password: hash,
-      });
+      const hash = await bcrypt.hash(updateUserDto.password, 10);
+      updateUserDto = { ...updateUserDto, password: hash };
     }
     return await this.usersRepository.update(id, updateUserDto);
   }
 
   async removeOne(id: number) {
     await this.usersRepository.delete({ id });
+  }
+
+  async getUserWishesByUsername(username: string) {
+    const user = await this.findOne({
+      where: { username },
+      relations: {
+        wishes: { owner: true },
+      },
+    });
+
+    return user.wishes;
+  }
+
+  async getUserWishesById(id: number) {
+    const user = await this.findOne({
+      where: { id },
+      relations: {
+        wishes: { owner: true },
+      },
+    });
+
+    return user.wishes;
   }
 }

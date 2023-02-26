@@ -70,8 +70,6 @@ export class WishesService {
     });
   }
 
-  // 20 подарков, которые копируют в свой профиль чаще всего (чек-лист - 10шт)
-  // сортировка по колонке copied, а также опция take
   getTopWishes() {
     return this.wishesRepository.find({
       order: {
@@ -81,8 +79,6 @@ export class WishesService {
     });
   }
 
-  // список из 40 подарков добавленных недавно
-  // сортировку по дате создания и опции take
   getLastWishes() {
     return this.wishesRepository.find({
       order: {
