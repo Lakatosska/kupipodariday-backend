@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
@@ -53,7 +53,7 @@ export class WishlistsService {
     });
 
     if (wishlist.owner.id !== userId) {
-      throw new ForbiddenException(
+      throw new BadRequestException(
         'Можно редактировать только свои списки подарков',
       );
     }
@@ -68,7 +68,7 @@ export class WishlistsService {
     });
 
     if (wishlist.owner.id !== userId) {
-      throw new ForbiddenException(
+      throw new BadRequestException(
         'Вы можете удалять только свои списки подарков',
       );
     }

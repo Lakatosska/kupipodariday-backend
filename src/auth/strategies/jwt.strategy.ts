@@ -26,7 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     /* В subject токена будем передавать идентификатор пользователя */
     const user = await this.usersService.findOneById(jwtPayload.sub);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Некорректная пара логин и пароль');
     }
 
     return user;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -24,6 +24,7 @@ export class WishesService {
       price,
       description,
       owner: user,
+      offers: [],
     });
     return await this.wishesRepository.save(wish);
   }
@@ -39,7 +40,7 @@ export class WishesService {
   async updateOne(id: number, updateWishDto: UpdateWishDto) {
     const wish = await this.wishesRepository.findOneBy({ id });
     if (wish.raised > 0) {
-      return console.log(
+      throw new BadRequestException(
         'Вы можете редактировать подарки, на которые еще никто не скинулся',
       );
     }
@@ -98,5 +99,9 @@ export class WishesService {
       },
       take: 40,
     });
+  }
+
+  updateRaisedAmount(id: number, raised: number) {
+    return this.wishesRepository.update(id, { raised });
   }
 }
