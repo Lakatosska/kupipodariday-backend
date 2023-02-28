@@ -12,7 +12,7 @@ import { NotFoundException } from '@nestjs/common/exceptions';
 export class WishesService {
   constructor(
     @InjectRepository(Wish)
-    private wishesRepository: Repository<Wish>,
+    private readonly wishesRepository: Repository<Wish>,
   ) {}
 
   // передаем юзера, чтобы заполнить поле ownerId в таблице

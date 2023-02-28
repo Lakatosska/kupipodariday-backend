@@ -1,38 +1,11 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
-import {
-  Length,
-  IsDate,
-  IsUrl,
-  IsFQDN,
-  IsInt,
-  IsPositive,
-  IsNumber,
-  isPositive,
-} from 'class-validator';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Length, IsUrl, IsPositive, IsNumber } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 import { Offer } from '../../offers/entities/offer.entity';
+import { DefaultEntity } from '../../common/entity/default.entity';
 
 @Entity()
-export class Wish {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @CreateDateColumn()
-  @IsDate()
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
-  @IsDate()
-  updatedAt: Date;
-
+export class Wish extends DefaultEntity {
   @Column()
   @Length(1, 250)
   name: string;
@@ -52,17 +25,6 @@ export class Wish {
   price: number;
 
   // сумма предварительного сбора
-  /*
-  @Column({
-    type: 'numeric',
-    precision: 10,
-    scale: 2,
-    default: 0,
-  })
-  
-  @Column({ default: 0, nullable: true })
-  @IsPositive()
-  */
   @Column({ nullable: true })
   @IsNumber()
   raised: number;
@@ -71,7 +33,6 @@ export class Wish {
   @Length(1, 1024)
   description: string;
 
-  // wish.entity.ts
   // ссылка на пользователя, который добавил пожелание подарка
   @ManyToOne(() => User, (user) => user.wishes)
   owner: User;

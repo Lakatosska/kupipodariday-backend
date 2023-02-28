@@ -11,10 +11,10 @@ import { Offer } from './entities/offer.entity';
 export class OffersService {
   constructor(
     @InjectRepository(Offer)
-    private offersRepository: Repository<Offer>,
+    private readonly offersRepository: Repository<Offer>,
     @InjectRepository(Wish)
-    private wishesRepository: Repository<Wish>,
-    private wishesService: WishesService,
+    private readonly wishesRepository: Repository<Wish>,
+    private readonly wishesService: WishesService,
   ) {}
 
   async create(user: User, createOfferDto: CreateOfferDto) {

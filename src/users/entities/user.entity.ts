@@ -1,15 +1,7 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import {
   Length,
   IsNotEmpty,
-  IsDate,
   IsOptional,
   IsEmail,
   IsUrl,
@@ -17,20 +9,11 @@ import {
 import { Offer } from '../../offers/entities/offer.entity';
 import { Wish } from '../../wishes/entities/wish.entity';
 import { Wishlist } from '../../wishlists/entities/wishlist.entity';
+import { DefaultEntity } from '../../common/entity/default.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @CreateDateColumn()
-  @IsDate()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  @IsDate()
-  updatedAt: Date;
-
+export class User extends DefaultEntity {
   @Column({ unique: true })
   @Length(2, 30)
   @IsNotEmpty()
@@ -67,7 +50,7 @@ export class User {
   @OneToMany(() => Offer, (offer) => offer.user)
   offers: Offer[];
 
-  // wishlists содержит список вишлистов, которые создал пользователь
+  // содержит список вишлистов, которые создал пользователь
   @OneToMany(() => Wishlist, (wishlist) => wishlist.owner)
   wishlists: Wishlist[];
 }

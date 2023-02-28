@@ -1,30 +1,11 @@
-import { IsDate, IsUrl, Length, MaxLength } from 'class-validator';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { IsUrl, Length, MaxLength } from 'class-validator';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { Wish } from '../../wishes/entities/wish.entity';
 import { User } from '../../users/entities/user.entity';
+import { DefaultEntity } from '../../common/entity/default.entity';
 
 @Entity()
-export class Wishlist {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @CreateDateColumn()
-  @IsDate()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  @IsDate()
-  updatedAt: Date;
-
+export class Wishlist extends DefaultEntity {
   @Column()
   @Length(1, 250)
   name: string;
@@ -39,7 +20,6 @@ export class Wishlist {
   @IsUrl()
   image: string;
 
-  // колонка есть только в сваггере
   @ManyToOne(() => User, (user) => user.wishlists)
   owner: User;
 

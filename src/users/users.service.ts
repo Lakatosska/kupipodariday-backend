@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -11,7 +11,7 @@ import { FindUsersDto } from './dto/find-users.dto';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -34,14 +34,23 @@ export class UsersService {
   }
 
   async findOneById(id: number) {
-    const user = await this.usersRepository.findOneBy({ id });
+    const user = this.findOne({
+      where: { id },
+    });
+    if (!user) {
+      throw new NotFoundException('такой пользователь не существует');
+    }
     return user;
   }
 
   async findOneByUsername(username: string) {
-    return await this.usersRepository.findOne({
-      where: { username: username },
+    const user = this.findOne({
+      where: { username },
     });
+    if (!user) {
+      throw new NotFoundException('такой пользователь не существует');
+    }
+    return user;
   }
 
   async findMany(findUsersDto: FindUsersDto) {

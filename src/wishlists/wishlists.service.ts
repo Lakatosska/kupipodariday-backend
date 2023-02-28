@@ -11,7 +11,7 @@ import { Wishlist } from './entities/wishlist.entity';
 export class WishlistsService {
   constructor(
     @InjectRepository(Wishlist)
-    private wishlistsRepository: Repository<Wishlist>,
+    private readonly wishlistsRepository: Repository<Wishlist>,
   ) {}
   /*
   async create(user: User, createWishlistDto: CreateWishlistDto) {
