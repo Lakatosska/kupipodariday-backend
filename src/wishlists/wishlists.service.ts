@@ -13,7 +13,7 @@ export class WishlistsService {
     @InjectRepository(Wishlist)
     private wishlistsRepository: Repository<Wishlist>,
   ) {}
-
+  /*
   async create(user: User, createWishlistDto: CreateWishlistDto) {
     const { name, description, image, itemsId } = createWishlistDto;
     const items = itemsId.map((id) => ({ id } as Wish));
@@ -23,6 +23,19 @@ export class WishlistsService {
       image,
       items,
       owner: user,
+    });
+    return await this.wishlistsRepository.save(wishlist);
+  }
+*/
+  async create(createWishlistDto: CreateWishlistDto, ownerId: number) {
+    const { name, description, image, itemsId } = createWishlistDto;
+    const items = itemsId.map((id) => ({ id } as Wish));
+    const wishlist = this.wishlistsRepository.create({
+      name,
+      description,
+      image,
+      items,
+      owner: { id: ownerId },
     });
     return await this.wishlistsRepository.save(wishlist);
   }

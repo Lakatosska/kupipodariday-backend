@@ -26,7 +26,7 @@ export class WishesService {
       description,
       raised: 0,
       owner: user,
-      offers: [],
+      // offers: [],
     });
     return await this.wishesRepository.save(wish);
   }
@@ -62,7 +62,7 @@ export class WishesService {
   // findOne(query) {
   //   return this.wishesRepository.findOne(query);
   // }
-
+  /*
   async copyWish(user: User, id: number) {
     const wish = await this.findOne(id);
 
@@ -78,6 +78,25 @@ export class WishesService {
       description,
       owner: user,
     });
+  }
+*/
+  async copyWish(id: number, user: User): Promise<object> {
+    const wish = await this.findOne(id);
+    if (wish.owner.id !== user.id) {
+      const copied = wish.copied + 1;
+      await this.wishesRepository.update(id, { copied });
+      const { name, link, image, price, description, raised } = wish;
+      const copiedWish = await this.wishesRepository.create({
+        name,
+        link,
+        image,
+        price,
+        description,
+        raised: 0,
+        owner: user,
+      });
+      return await this.wishesRepository.save(copiedWish);
+    }
   }
 
   getTopWishes() {

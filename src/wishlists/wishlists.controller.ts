@@ -16,7 +16,7 @@ import { ReqUser } from 'src/users/users.decorator';
 import { User } from 'src/users/entities/user.entity';
 
 @UseGuards(JwtGuard)
-@Controller('wishlists')
+@Controller('wishlistlists')
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 
@@ -25,7 +25,7 @@ export class WishlistsController {
     @ReqUser() user: User,
     @Body() createWishlistDto: CreateWishlistDto,
   ) {
-    return await this.wishlistsService.create(user, createWishlistDto);
+    return await this.wishlistsService.create(createWishlistDto, user.id);
   }
 
   @Get()
