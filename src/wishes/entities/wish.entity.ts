@@ -42,19 +42,29 @@ export class Wish {
   @IsUrl()
   link: string;
 
-  // Должна быть валидным URL
+  // Должен быть валидный URL
   @Column()
   @IsUrl()
   image: string;
 
-  // с округлением до сотых
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   @IsNumber()
   price: number;
 
-  // сумма предварительного сбора, округляется до сотых
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  // сумма предварительного сбора
+  /*
+  @Column({
+    type: 'numeric',
+    precision: 10,
+    scale: 2,
+    default: 0,
+  })
+  
+  @Column({ default: 0, nullable: true })
   @IsPositive()
+  */
+  @Column({ nullable: true })
+  @IsNumber()
   raised: number;
 
   @Column({ default: '' })

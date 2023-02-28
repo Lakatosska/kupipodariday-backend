@@ -6,6 +6,7 @@ import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { Wish } from './entities/wish.entity';
 import { ReqUser } from 'src/users/users.decorator';
+import { NotFoundException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class WishesService {
@@ -16,23 +17,19 @@ export class WishesService {
 
   // передаем юзера, чтобы заполнить поле ownerId в таблице
   async create(user: User, createWishDto: CreateWishDto) {
-    const { name, link, image, price, description } = createWishDto;
+    const { name, link, image, price, description, raised } = createWishDto;
     const wish = this.wishesRepository.create({
       name,
       link,
       image,
       price,
       description,
+      raised: 0,
       owner: user,
       offers: [],
     });
     return await this.wishesRepository.save(wish);
   }
-
-  //Добавлено 24.02.2023 пользователем undefined ↗
-  // findOne(id: number) {
-  //   return this.wishesRepository.findOneBy({ id });
-  // }
 
   // !! прописать ошибку
   // проверка, что юзер редактирует свой виш
@@ -101,7 +98,22 @@ export class WishesService {
     });
   }
 
-  updateRaisedAmount(id: number, raised: number) {
-    return this.wishesRepository.update(id, { raised });
+  // updateRaisedAmount(id: number, raised: number) {
+  //   return this.wishesRepository.update(id, { raised });
+  // }
+
+  updateRaisedAmount(wish: Wish, amount: number) {
+    return this.wishesRepository.update(
+      { id: wish.id },
+      { raised: wish.raised + amount },
+    );
+  }
+
+  async getWishById(wishId: number) {
+    const wish = await this.wishesRepository.findOne({
+      where: { id: wishId },
+      relations: ['owner', 'offers'],
+    });
+    return wish;
   }
 }

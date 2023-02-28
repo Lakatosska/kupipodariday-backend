@@ -32,7 +32,12 @@ export class Offer {
   item: Wish;
 
   // сумма заявки, округляется до двух знаков после запятой
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0,
+  })
   @IsPositive()
   amount: number;
 

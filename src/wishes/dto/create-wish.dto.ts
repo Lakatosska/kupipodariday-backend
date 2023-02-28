@@ -35,4 +35,8 @@ export class CreateWishDto {
   @Length(1, 1024)
   @IsOptional()
   description: string;
+
+  @IsNumber()
+  @IsOptional()
+  raised: number;
 }
