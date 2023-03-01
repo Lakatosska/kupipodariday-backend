@@ -25,6 +25,7 @@ export class AuthService {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       /* Исключаем пароль из результата */
+      // eslint-disable-next-line
       const { password, ...result } = user;
       return result;
     }
