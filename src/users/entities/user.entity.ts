@@ -10,7 +10,6 @@ import { Offer } from '../../offers/entities/offer.entity';
 import { Wish } from '../../wishes/entities/wish.entity';
 import { Wishlist } from '../../wishlists/entities/wishlist.entity';
 import { DefaultEntity } from '../../common/entity/default.entity';
-import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User extends DefaultEntity {
