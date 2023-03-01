@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
@@ -19,7 +19,7 @@ export class OffersService {
 
   async create(user: User, createOfferDto: CreateOfferDto) {
     const { itemId, amount, hidden } = createOfferDto;
-    const wish = await this.wishesService.getWishById(itemId);
+    const wish = await this.wishesService.findWish(itemId);
 
     if (user.id === wish.owner.id) {
       throw new BadRequestException(
@@ -39,16 +39,26 @@ export class OffersService {
     });
 
     await this.wishesService.updateRaisedAmount(wish, amount);
-
     await this.offersRepository.save(newOffer);
     return newOffer;
   }
 
   findAll() {
-    return this.offersRepository.find();
+    return this.offersRepository.find({
+      relations: {
+        user: true,
+        item: true,
+      },
+    });
   }
 
   findOne(id: number) {
-    return this.offersRepository.findOneBy({ id });
+    return this.offersRepository.findOne({
+      where: { id },
+      relations: {
+        user: true,
+        item: true,
+      },
+    });
   }
 }

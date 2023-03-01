@@ -22,7 +22,7 @@ export class WishesController {
   @UseGuards(JwtGuard)
   @Post()
   create(@ReqUser() user: User, @Body() createWishDto: CreateWishDto) {
-    return this.wishesService.create(user, createWishDto);
+    return this.wishesService.create(user.id, createWishDto);
   }
 
   @Get('last')
@@ -35,14 +35,12 @@ export class WishesController {
     return this.wishesService.getTopWishes();
   }
 
-  // работает
   @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.wishesService.findOne(+id);
+    return this.wishesService.findWish(+id);
   }
 
-  // работает
   @UseGuards(JwtGuard)
   @Patch(':id')
   async update(
@@ -50,17 +48,15 @@ export class WishesController {
     @ReqUser() user: User,
     @Body() updateWishDto: UpdateWishDto,
   ) {
-    return await this.wishesService.updateOne(+id, updateWishDto);
+    return await this.wishesService.updateOne(+id, updateWishDto, user.id);
   }
 
-  // работает
   @UseGuards(JwtGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.wishesService.removeOne(+id);
   }
 
-  // работает
   @UseGuards(JwtGuard)
   @Post(':id/copy')
   async copy(@ReqUser() user: User, @Param('id') id: string) {

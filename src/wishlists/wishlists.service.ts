@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { Repository } from 'typeorm';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
@@ -13,8 +12,8 @@ export class WishlistsService {
     @InjectRepository(Wishlist)
     private readonly wishlistsRepository: Repository<Wishlist>,
   ) {}
-  /*
-  async create(user: User, createWishlistDto: CreateWishlistDto) {
+
+  async create(id: number, createWishlistDto: CreateWishlistDto) {
     const { name, description, image, itemsId } = createWishlistDto;
     const items = itemsId.map((id) => ({ id } as Wish));
     const wishlist = this.wishlistsRepository.create({
@@ -22,32 +21,27 @@ export class WishlistsService {
       description,
       image,
       items,
-      owner: user,
-    });
-    return await this.wishlistsRepository.save(wishlist);
-  }
-*/
-  async create(createWishlistDto: CreateWishlistDto, ownerId: number) {
-    const { name, description, image, itemsId } = createWishlistDto;
-    const items = itemsId.map((id) => ({ id } as Wish));
-    const wishlist = this.wishlistsRepository.create({
-      name,
-      description,
-      image,
-      items,
-      owner: { id: ownerId },
+      owner: { id },
     });
     return await this.wishlistsRepository.save(wishlist);
   }
 
   findAll() {
-    return this.wishlistsRepository.find({ relations: ['items', 'owner'] });
+    return this.wishlistsRepository.find({
+      relations: {
+        owner: true,
+        items: true,
+      },
+    });
   }
 
   findOneById(id: number) {
     return this.wishlistsRepository.findOne({
       where: { id },
-      relations: ['items', 'owner'],
+      relations: {
+        owner: true,
+        items: true,
+      },
     });
   }
 
@@ -65,12 +59,11 @@ export class WishlistsService {
       relations: { owner: true },
     });
 
-    if (wishlist.owner.id !== userId) {
+    if (userId !== wishlist.owner.id) {
       throw new BadRequestException(
         'Можно редактировать только свои списки подарков',
       );
     }
-
     return await this.wishlistsRepository.update(id, updateWishlistDto);
   }
 
@@ -80,7 +73,7 @@ export class WishlistsService {
       relations: { owner: true },
     });
 
-    if (wishlist.owner.id !== userId) {
+    if (userId !== wishlist.owner.id) {
       throw new BadRequestException(
         'Вы можете удалять только свои списки подарков',
       );

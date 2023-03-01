@@ -5,7 +5,6 @@ import {
   Length,
   IsUrl,
   IsNotEmpty,
-  IsFQDN,
   IsNumber,
   Min,
   IsOptional,
@@ -30,7 +29,6 @@ export class UpdateWishDto extends PartialType(CreateWishDto) {
   @IsOptional()
   image: string;
 
-  // с округлением до сотых
   @IsNumber()
   @Min(1)
   @IsNotEmpty()

@@ -25,7 +25,7 @@ export class WishlistsController {
     @ReqUser() user: User,
     @Body() createWishlistDto: CreateWishlistDto,
   ) {
-    return await this.wishlistsService.create(createWishlistDto, user.id);
+    return await this.wishlistsService.create(user.id, createWishlistDto);
   }
 
   @Get()
