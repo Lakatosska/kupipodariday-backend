@@ -61,4 +61,8 @@ export class OffersService {
       },
     });
   }
+
+  async removeOne(id: number) {
+    await this.offersRepository.delete(id);
+  }
 }

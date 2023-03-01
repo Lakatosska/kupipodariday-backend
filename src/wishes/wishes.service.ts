@@ -57,8 +57,8 @@ export class WishesService {
     return await this.wishesRepository.update(wish, updateWishDto);
   }
 
-  async removeOne(wishId: number) {
-    await this.wishesRepository.delete(wishId);
+  async removeOne(id: number) {
+    await this.wishesRepository.delete(id);
   }
 
   async copyWish(id: number, user: User) {
