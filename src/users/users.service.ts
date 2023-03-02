@@ -65,7 +65,8 @@ export class UsersService {
       const hash = await bcrypt.hash(updateUserDto.password, 10);
       updateUserDto = { ...updateUserDto, password: hash };
     }
-    return await this.usersRepository.update(id, updateUserDto);
+    await this.usersRepository.update(id, updateUserDto);
+    return this.findOneById(id);
   }
 
   async removeOne(id: number) {
@@ -76,7 +77,7 @@ export class UsersService {
     const user = await this.findOne({
       where: { username },
       relations: {
-        wishes: { owner: true },
+        wishes: { owner: true, offers: true },
       },
     });
 
@@ -87,10 +88,9 @@ export class UsersService {
     const user = await this.findOne({
       where: { id },
       relations: {
-        wishes: { owner: true },
+        wishes: { owner: true, offers: true },
       },
     });
-
     return user.wishes;
   }
 }

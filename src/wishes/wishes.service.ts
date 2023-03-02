@@ -27,7 +27,7 @@ export class WishesService {
       owner: { id },
       offers: [],
     });
-    return await this.wishesRepository.save(wish);
+    await this.wishesRepository.save(wish);
   }
 
   async findWish(id: number) {
@@ -54,7 +54,7 @@ export class WishesService {
         'Вы не можете редактировать этот подарок. Идет сбор.',
       );
     }
-    return await this.wishesRepository.update(wish, updateWishDto);
+    return await this.wishesRepository.update(wishId, updateWishDto);
   }
 
   async removeOne(id: number) {
@@ -83,6 +83,10 @@ export class WishesService {
         copied: 'DESC',
       },
       take: 10,
+      relations: {
+        owner: true,
+        offers: true,
+      },
     });
   }
 
@@ -92,6 +96,10 @@ export class WishesService {
         createdAt: 'DESC',
       },
       take: 40,
+      relations: {
+        owner: true,
+        offers: true,
+      },
     });
   }
 

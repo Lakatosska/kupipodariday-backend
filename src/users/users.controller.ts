@@ -21,7 +21,9 @@ export class UsersController {
 
   @Get('me')
   findProfile(@ReqUser() user: User) {
-    return user;
+    // eslint-disable-next-line
+    const { password, ...result } = user;
+    return result;
   }
 
   @Patch('me')

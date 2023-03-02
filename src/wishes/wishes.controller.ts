@@ -21,8 +21,9 @@ export class WishesController {
 
   @UseGuards(JwtGuard)
   @Post()
-  create(@ReqUser() user: User, @Body() createWishDto: CreateWishDto) {
-    return this.wishesService.create(user.id, createWishDto);
+  async create(@ReqUser() user: User, @Body() createWishDto: CreateWishDto) {
+    await this.wishesService.create(user.id, createWishDto);
+    return {};
   }
 
   @Get('last')
@@ -48,7 +49,8 @@ export class WishesController {
     @ReqUser() user: User,
     @Body() updateWishDto: UpdateWishDto,
   ) {
-    return await this.wishesService.updateOne(+id, updateWishDto, user.id);
+    await this.wishesService.updateOne(+id, updateWishDto, user.id);
+    return {};
   }
 
   @UseGuards(JwtGuard)
@@ -60,6 +62,7 @@ export class WishesController {
   @UseGuards(JwtGuard)
   @Post(':id/copy')
   async copy(@ReqUser() user: User, @Param('id') id: string) {
-    return this.wishesService.copyWish(+id, user);
+    this.wishesService.copyWish(+id, user);
+    return {};
   }
 }
