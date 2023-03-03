@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { Repository } from 'typeorm';
@@ -60,11 +61,12 @@ export class WishlistsService {
     });
 
     if (userId !== wishlist.owner.id) {
-      throw new BadRequestException(
+      throw new ForbiddenException(
         'Можно редактировать только свои списки подарков',
       );
     }
-    return await this.wishlistsRepository.update(id, updateWishlistDto);
+    await this.wishlistsRepository.update(id, updateWishlistDto);
+    return this.findOneById(id);
   }
 
   async removeOne(id: number, userId: number) {
