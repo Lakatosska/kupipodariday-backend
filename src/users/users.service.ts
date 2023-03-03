@@ -6,16 +6,21 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { FindUsersDto } from './dto/find-users.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const hash = await bcrypt.hash(createUserDto.password, 10);
+    const hash = await bcrypt.hash(
+      createUserDto.password,
+      this.configService.get('saltRound'),
+    );
     const newUser = await this.usersRepository.create({
       ...createUserDto,
       password: hash,
@@ -62,7 +67,10 @@ export class UsersService {
 
   async updateOne(id: number, updateUserDto: UpdateUserDto) {
     if (updateUserDto.password) {
-      const hash = await bcrypt.hash(updateUserDto.password, 10);
+      const hash = await bcrypt.hash(
+        updateUserDto.password,
+        this.configService.get('saltRound'),
+      );
       updateUserDto = { ...updateUserDto, password: hash };
     }
     await this.usersRepository.update(id, updateUserDto);
@@ -80,7 +88,6 @@ export class UsersService {
         wishes: { owner: true, offers: true },
       },
     });
-
     return user.wishes;
   }
 
@@ -92,5 +99,22 @@ export class UsersService {
       },
     });
     return user.wishes;
+  }
+
+  async findOneWithPasswordAndEmail(username: string) {
+    const user = await this.usersRepository.findOne({
+      where: { username },
+      select: [
+        'id',
+        'password',
+        'email',
+        'createdAt',
+        'updatedAt',
+        'about',
+        'avatar',
+      ],
+    });
+    if (!user) throw new NotFoundException('такой пользователь не существует');
+    return user;
   }
 }

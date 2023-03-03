@@ -20,9 +20,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
-  findProfile(@ReqUser() user: User) {
-    // eslint-disable-next-line
-    const { password, ...result } = user;
+  async findProfile(@ReqUser() user: User) {
+    const profile = await this.usersService.findOneWithPasswordAndEmail(
+      user.username,
+    );
+    //eslint-disable-next-line
+    const { password, ...result } = profile;
     return result;
   }
 

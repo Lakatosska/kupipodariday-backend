@@ -21,7 +21,7 @@ export class AuthService {
 
   // проверяет, совпадает ли пароль пользователя с тем, что есть в базе
   async validatePassword(username: string, password: string) {
-    const user = await this.usersService.findOneByUsername(username);
+    const user = await this.usersService.findOneWithPasswordAndEmail(username);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       /* Исключаем пароль из результата */

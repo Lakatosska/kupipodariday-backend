@@ -32,12 +32,12 @@ export class User extends DefaultEntity {
   @IsOptional()
   avatar: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, select: false })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   @IsNotEmpty()
   password: string;
 
