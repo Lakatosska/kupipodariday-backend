@@ -55,8 +55,8 @@ export class WishesController {
 
   @UseGuards(JwtGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishesService.removeOne(+id);
+  remove(@ReqUser() user: User, @Param('id') id: string) {
+    return this.wishesService.removeOne(+id, user.id);
   }
 
   @UseGuards(JwtGuard)

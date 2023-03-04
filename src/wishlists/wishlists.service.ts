@@ -65,7 +65,9 @@ export class WishlistsService {
         'Можно редактировать только свои списки подарков',
       );
     }
-    await this.wishlistsRepository.update(id, updateWishlistDto);
+    const { itemsId, ...rest } = updateWishlistDto;
+    const items = itemsId.map((id) => ({ id } as Wishlist));
+    await this.wishlistsRepository.save({ id, items, ...rest });
     return this.findOneById(id);
   }
 
@@ -81,5 +83,6 @@ export class WishlistsService {
       );
     }
     await this.wishlistsRepository.delete(id);
+    return wishlist;
   }
 }

@@ -57,8 +57,15 @@ export class WishesService {
     return await this.wishesRepository.update(wishId, updateWishDto);
   }
 
-  async removeOne(id: number) {
+  async removeOne(id: number, userId: number) {
+    const wish = await this.findWish(id);
+
+    if (userId !== wish.owner.id) {
+      throw new BadRequestException('Вы можете удалять только свои подарки');
+    }
+
     await this.wishesRepository.delete(id);
+    return wish;
   }
 
   async copyWish(id: number, user: User) {
